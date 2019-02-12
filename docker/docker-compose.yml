@@ -1,0 +1,12 @@
+mysql:
+  image: mysql
+  container_name: cyclopoid-db
+  ports:
+    - "3306:3306"
+  environment:
+    - MYSQL_USER=dbuser
+    - MYSQL_PASSWORD=dbpass
+    - MYSQL_DATABASE=cyclopoid
+    - MYSQL_ROOT_PASSWORD=root
+  volumes:
+    - "./conf.d:/etc/mysql/conf.d:ro"

@@ -8,7 +8,7 @@ import ua.cyclopoid.back.form.FormRepository;
 
 
 @Slf4j
-public class LoadDatabase {
+public class DBManager {
 
     @Bean
     public CommandLineRunner initDatabase(FormRepository repository) {

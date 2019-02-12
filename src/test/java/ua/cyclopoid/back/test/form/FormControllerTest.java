@@ -1,13 +1,20 @@
-package ua.cyclopoid.back.form;
+package ua.cyclopoid.back.test.form;
 
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
 import org.springframework.test.web.servlet.MockMvc;
+import ua.cyclopoid.back.config.TestConfig;
+import ua.cyclopoid.back.db.DataSourceImpl;
+import ua.cyclopoid.back.form.Form;
+import ua.cyclopoid.back.form.FormController;
 
 import java.util.List;
 
@@ -22,10 +29,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(FormController.class)
+@ContextConfiguration(classes = TestConfig.class, loader = AnnotationConfigWebContextLoader.class)
 public class FormControllerTest {
+
+    public static final String DUMP_FILE_NAME = "dump/testDB.sql";
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private DataSourceImpl dataSourceImpl;
 
     @MockBean
     private FormController formController;
@@ -45,5 +58,10 @@ public class FormControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].name", is(form.getName())));
+    }
+
+    @BeforeEach
+    public void testInit() {
+//        DBManager.restoreDB(this.dataSourceImpl, DUMP_FILE_NAME);
     }
 }
