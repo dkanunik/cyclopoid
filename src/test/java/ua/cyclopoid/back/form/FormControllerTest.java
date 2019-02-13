@@ -1,4 +1,4 @@
-package ua.cyclopoid.back.test.form;
+package ua.cyclopoid.back.form;
 
 
 import org.junit.jupiter.api.BeforeEach;
@@ -11,10 +11,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
 import org.springframework.test.web.servlet.MockMvc;
-import ua.cyclopoid.back.config.TestConfig;
+import ua.cyclopoid.TestConfig;
+import ua.cyclopoid.back.db.DBManager;
 import ua.cyclopoid.back.db.DataSourceImpl;
-import ua.cyclopoid.back.form.Form;
-import ua.cyclopoid.back.form.FormController;
 
 import java.util.List;
 
@@ -27,12 +26,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(SpringExtension.class)
 @WebMvcTest(FormController.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = TestConfig.class, loader = AnnotationConfigWebContextLoader.class)
 public class FormControllerTest {
 
-    public static final String DUMP_FILE_NAME = "dump/testDB.sql";
+    public static final String RESTORE_FILE = "restore";
 
     @Autowired
     private MockMvc mockMvc;
@@ -62,6 +61,6 @@ public class FormControllerTest {
 
     @BeforeEach
     public void testInit() {
-//        DBManager.restoreDB(this.dataSourceImpl, DUMP_FILE_NAME);
+        DBManager.restoreDB(this.dataSourceImpl, RESTORE_FILE);
     }
 }

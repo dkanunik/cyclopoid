@@ -1,6 +1,5 @@
 package ua.cyclopoid.back.db;
 
-import org.springframework.core.io.ClassPathResource;
 import ua.cyclopoid.back.db.api.DataSource;
 
 import java.io.BufferedReader;
@@ -9,27 +8,11 @@ import java.io.InputStreamReader;
 
 public class DBManager {
 
+    public static final String DB_DIR = new File("db").getAbsolutePath() + "/";
+
     public static boolean restoreDB(DataSource dataSource, String fileName) {
         try {
-            File file = new ClassPathResource(fileName).getFile();
-
-            String[] executeCmd = new String[]{
-                    "mysql"
-                    , "--user=" + dataSource.getUserName()
-                    , "--password=" + dataSource.getPassword()
-                    , dataSource.getDbName()
-                    , " source " + file.getAbsolutePath()
-            };
-
-            String cmd = "docker exec -i cyclopoid-db ls -al";
-            //String cmd = "docker exec cyclopoid-db /usr/bin/mysql -u root --password=root cyclopoid < " + file.getAbsolutePath();
-           // String cmd = "cat " + file.getAbsolutePath();
-
-
-            System.out.println("cmd = " + cmd);
-            //System.out.println(Arrays.toString(executeCmd));
-
-            Process runtimeProcess = Runtime.getRuntime().exec(cmd);
+            Process runtimeProcess = Runtime.getRuntime().exec(DB_DIR + fileName + ".sh");
             int processComplete = runtimeProcess.waitFor();
             int returnValue = runtimeProcess.exitValue();
 

@@ -10,3 +10,4 @@ mysql:
     - MYSQL_ROOT_PASSWORD=root
   volumes:
     - "./conf.d:/etc/mysql/conf.d:ro"
+    - "../db:/var/backups"
