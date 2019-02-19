@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+
+  cyclopoid-back:
+    image: dkanunik/cyclopoid-back:1.0.0
+    container_name: cyclopoid-back
+    ports:
+      - "8080:80"
+    network_mode: "host"

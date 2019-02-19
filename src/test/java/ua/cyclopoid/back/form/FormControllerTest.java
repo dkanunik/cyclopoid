@@ -13,7 +13,8 @@ import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
 import org.springframework.test.web.servlet.MockMvc;
 import ua.cyclopoid.TestConfig;
 import ua.cyclopoid.back.db.DBManager;
-import ua.cyclopoid.back.db.DataSourceImpl;
+import ua.cyclopoid.back.db.api.DataSource;
+import ua.cyclopoid.back.form.api.FormRepository;
 
 import java.util.List;
 
@@ -31,16 +32,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(classes = TestConfig.class, loader = AnnotationConfigWebContextLoader.class)
 public class FormControllerTest {
 
-    public static final String RESTORE_FILE = "restore";
+    public static final String RESTORE_FILE_NAME = "restore";
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private DataSourceImpl dataSourceImpl;
+    private DataSource dataSource;
 
     @MockBean
     private FormController formController;
+
+    @MockBean
+    public FormRepository formRepository;
 
     @Test
     public void shouldReturnDefaultMessage() throws Exception {
@@ -61,6 +65,6 @@ public class FormControllerTest {
 
     @BeforeEach
     public void testInit() {
-        DBManager.restoreDB(this.dataSourceImpl, RESTORE_FILE);
+        DBManager.restoreDB(this.dataSource, RESTORE_FILE_NAME);
     }
 }

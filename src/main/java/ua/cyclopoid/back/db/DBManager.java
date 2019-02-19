@@ -1,20 +1,24 @@
 package ua.cyclopoid.back.db;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import ua.cyclopoid.back.form.Form;
-import ua.cyclopoid.back.form.FormRepository;
+import ua.cyclopoid.back.form.FormController;
+import ua.cyclopoid.back.form.api.FormRepository;
 
 
-@Slf4j
 public class DBManager {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(FormController.class);
 
     @Bean
     public CommandLineRunner initDatabase(FormRepository repository) {
         return args -> {
-            log.info("Preloading " + repository.save(new Form("Login")));
-            log.info("Preloading " + repository.save(new Form("Register")));
+            LOGGER.info("Preloading " + repository.save(new Form("Login")));
+            LOGGER.info("Preloading " + repository.save(new Form("Register")));
         };
     }
 }
