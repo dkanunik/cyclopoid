@@ -14,18 +14,33 @@ $ ./gradlew dbRestore
 
 ##### App local
 ```
-# Build project
+# Build the project
 $ ./gradlew build
 
-# Launch application
-$ ./gradlew appStart 
+# Build the project excludeing unint tests
+$ ./gradlew build -x test
+
+# Launch the application
+$ ./gradlew localStart 
 
 # Launch unit tests
 $ ./gradlew test
 ```
 
-##### Containerization 
+#### Containerization
+
+##### Build image
 ```
-# Build and uplopad image
 $ ./gradlew image
+```
+
+##### Launch Back service
+```
+$ ./gradlew backStart
+```
+
+#### API
+```
+get all forms:
+http://<DOCKER_MACHINE_ID>:8080/form/all
 ```
