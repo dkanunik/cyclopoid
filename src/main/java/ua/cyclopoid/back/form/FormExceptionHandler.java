@@ -22,6 +22,8 @@ public class FormExceptionHandler extends ResponseEntityExceptionHandler {
         map.put("reuslt","error");
         map.put("exception", e.getClass().getName());
         map.put("mesage", e.getMessage());
+        map.put("http status code", String.valueOf(HttpStatus.NOT_FOUND.value()));
+        map.put("http status reason", HttpStatus.NOT_FOUND.getReasonPhrase());
 
         final HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
