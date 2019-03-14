@@ -22,4 +22,9 @@ public class FormServiceImpl implements FormService {
     public List<Form> findAll() {
         return this.formRepository.findAll();
     }
+
+    @Override
+    public Form getFormById(Long formId) {
+        return this.formRepository.getOne(formId);
+    }
 }

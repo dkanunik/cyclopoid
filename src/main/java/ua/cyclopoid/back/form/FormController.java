@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 @Controller()
-@RequestMapping(path="/form")
+@RequestMapping(path = "/form")
+@CrossOrigin("*")
 public class FormController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(FormController.class);
@@ -22,23 +23,38 @@ public class FormController {
     @Qualifier("formServiceImpl")
     public FormService formService;
 
-    @GetMapping(path="/all")
+    @GetMapping(path = "/all")
     public @ResponseBody
-    HashMap<String, List<Form>> getAllForms() {
-        HashMap<String, List<Form>> map = new HashMap<>();
-        map.put("forms", formService.findAll());
-        return map;
+    Map<String, List<Form>> getAllForms() {
+        HashMap<String, List<Form>> responce = new HashMap<>();
+        responce.put("forms", this.formService.findAll());
+        return responce;
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public @ResponseBody Map<String, String> addNewForm(@RequestParam String name) {
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public @ResponseBody
+    Map<String, String> addNewForm(@RequestBody Map<String, String> request) {
         Form form = new Form();
-        form.setName(name);
+        form.setName(request.get("formName"));
         this.formService.save(form);
 
-        return new HashMap<String,   String>() {{
+        return new HashMap<String, String>() {{
             put("result", "success");
         }};
+    }
+
+    @RequestMapping(value = "/by/id/{id}", method = RequestMethod.GET)
+    public @ResponseBody
+    Map<String, Form> getFormById(@PathVariable("id") String id) {
+        Long formId = null;
+        try {
+            formId = new Long(id);
+        } catch (NumberFormatException e) {
+            throw new FormNotFoundException("Invalid form id: " + id);
+        }
+        HashMap<String, Form> responce = new HashMap<>();
+        responce.put("form", this.formService.getFormById(formId));
+        return responce;
     }
 
 }

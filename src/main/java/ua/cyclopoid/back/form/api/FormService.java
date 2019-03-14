@@ -11,4 +11,6 @@ public interface FormService {
     Form save(Form form);
 
     List<Form> findAll();
+
+    Form getFormById(Long formId);
 }
