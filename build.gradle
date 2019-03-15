@@ -79,6 +79,10 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+task evalDockerMachine(type: Exec) {
+    commandLine 'eval', '\\"$(docker-machine env cyclopoid)\\"'
+}
+
 task dbRestore(type: Exec) {
     commandLine 'sh', 'db/restore.sh'
 }

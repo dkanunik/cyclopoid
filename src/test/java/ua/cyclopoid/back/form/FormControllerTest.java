@@ -17,8 +17,10 @@ import ua.cyclopoid.back.db.api.DataSource;
 import ua.cyclopoid.back.form.api.FormRepository;
 
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Collections.singletonList;
+import static java.util.Collections.singletonMap;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
@@ -47,20 +49,35 @@ public class FormControllerTest {
     public FormRepository formRepository;
 
     @Test
-    public void shouldReturnDefaultMessage() throws Exception {
-        Form form = new Form();
-        form.setName("feedback");
+    public void shouldReturnFormArray() throws Exception {
+        Form expectedForm = new Form();
+        expectedForm.setName("feedback");
 
-        List<Form> allForms = singletonList(form);
+        Map<String, List<Form>> expectedResponceBody = singletonMap("forms", singletonList(expectedForm));
 
-        given(this.formController.getAllForms()).willReturn(allForms);
-
+        given(this.formController.getAllForms()).willReturn(expectedResponceBody);
 
         this.mockMvc.perform(get("/form/all")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].name", is(form.getName())));
+                .andExpect(jsonPath("$.forms[*]", hasSize(1)));
+    }
+
+    @Test
+    public void shouldReturnFormById() throws Exception {
+        Form expectedForm = new Form();
+        expectedForm.setName("feedback");
+        expectedForm.setId(1L);
+
+        Map<String, Form> expectedResponceBody = singletonMap("form", expectedForm);
+
+        given(this.formController.getFormById("1")).willReturn(expectedResponceBody);
+
+        this.mockMvc.perform(get("/form/by/id/1")
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.form.id", is(expectedForm.getId().intValue())))
+                .andExpect(jsonPath("$.form.name", is(expectedForm.getName())));
     }
 
     @BeforeEach

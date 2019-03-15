@@ -21,7 +21,7 @@ public class FormExceptionHandler extends ResponseEntityExceptionHandler {
         Map<String, String> map = new HashMap<String, String>();
         map.put("reuslt","error");
         map.put("exception", e.getClass().getName());
-        map.put("mesage", e.getMessage());
+        map.put("message", e.getMessage());
         map.put("http status code", String.valueOf(HttpStatus.NOT_FOUND.value()));
         map.put("http status reason", HttpStatus.NOT_FOUND.getReasonPhrase());
 

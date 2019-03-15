@@ -46,7 +46,7 @@ public class FormController {
     @RequestMapping(value = "/by/id/{id}", method = RequestMethod.GET)
     public @ResponseBody
     Map<String, Form> getFormById(@PathVariable("id") String id) {
-        Long formId = null;
+        Long formId;
         try {
             formId = new Long(id);
         } catch (NumberFormatException e) {
