@@ -40,7 +40,5 @@ $ ./gradlew backStart
 ```
 
 #### API
-```
-get all forms:
-http://<DOCKER_MACHINE_ID>:8080/form/all
-```
+* form/all
+* form/by/id/{formId}

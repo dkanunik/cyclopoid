@@ -14,7 +14,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import ua.cyclopoid.TestConfig;
 import ua.cyclopoid.back.db.DBManager;
 import ua.cyclopoid.back.db.api.DataSource;
-import ua.cyclopoid.back.form.api.FormRepository;
 
 import java.util.List;
 import java.util.Map;
@@ -34,19 +33,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(classes = TestConfig.class, loader = AnnotationConfigWebContextLoader.class)
 public class FormControllerTest {
 
-    public static final String RESTORE_FILE_NAME = "restore";
-
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private DataSource dataSource;
-
     @MockBean
     private FormController formController;
-
-    @MockBean
-    public FormRepository formRepository;
 
     @Test
     public void shouldReturnFormArray() throws Exception {
@@ -57,8 +48,9 @@ public class FormControllerTest {
 
         given(this.formController.getAllForms()).willReturn(expectedResponceBody);
 
-        this.mockMvc.perform(get("/form/all")
-                .contentType(APPLICATION_JSON))
+        this.mockMvc.perform(
+                get("/form/all")
+                        .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.forms[*]", hasSize(1)));
     }
@@ -73,15 +65,11 @@ public class FormControllerTest {
 
         given(this.formController.getFormById("1")).willReturn(expectedResponceBody);
 
-        this.mockMvc.perform(get("/form/by/id/1")
-                .contentType(APPLICATION_JSON))
+        this.mockMvc.perform(
+                get("/form/by/id/1")
+                        .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.form.id", is(expectedForm.getId().intValue())))
                 .andExpect(jsonPath("$.form.name", is(expectedForm.getName())));
-    }
-
-    @BeforeEach
-    public void testInit() {
-        DBManager.restoreDB(this.dataSource, RESTORE_FILE_NAME);
     }
 }

@@ -1,29 +1,40 @@
 package ua.cyclopoid.back.form;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import ua.cyclopoid.back.property.Property;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity()
+@NoArgsConstructor
+@Table(name = "form")
+@RequiredArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Form {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name = "formId")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NonNull
+    @Column(name = "name")
     private String name;
 
-    public Form() {
-    }
+    @JsonBackReference
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "form", cascade = CascadeType.ALL)
+    private Set<Property> properties = new HashSet<>();
 
-    public Form(String name) {
-        this.name = name;
+    public void addProperty(Property property) {
+        this.properties.add(property);
+        property.setForm(this);
     }
-
 }

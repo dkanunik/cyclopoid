@@ -18,16 +18,16 @@ public class FormExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {FormNotFoundException.class})
     protected ResponseEntity<Object> handleConflict(FormNotFoundException e, WebRequest request) {
 
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("reuslt","error");
-        map.put("exception", e.getClass().getName());
-        map.put("message", e.getMessage());
-        map.put("http status code", String.valueOf(HttpStatus.NOT_FOUND.value()));
-        map.put("http status reason", HttpStatus.NOT_FOUND.getReasonPhrase());
+        Map<String, String> responceBody = new HashMap<String, String>();
+        responceBody.put("reuslt","error");
+        responceBody.put("exception", e.getClass().getName());
+        responceBody.put("message", e.getMessage());
+        responceBody.put("httpStatusCode", String.valueOf(HttpStatus.NOT_FOUND.value()));
+        responceBody.put("httpStatusReason", HttpStatus.NOT_FOUND.getReasonPhrase());
 
         final HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 
-        return handleExceptionInternal(e, map, headers, HttpStatus.NOT_FOUND, request);
+        return handleExceptionInternal(e, responceBody, headers, HttpStatus.NOT_FOUND, request);
     }
 }
