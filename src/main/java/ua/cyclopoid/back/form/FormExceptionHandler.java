@@ -18,7 +18,7 @@ public class FormExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {FormNotFoundException.class})
     protected ResponseEntity<Object> handleConflict(FormNotFoundException e, WebRequest request) {
 
-        Map<String, String> responceBody = new HashMap<String, String>();
+        Map<String, String> responceBody = new HashMap<>();
         responceBody.put("reuslt","error");
         responceBody.put("exception", e.getClass().getName());
         responceBody.put("message", e.getMessage());

@@ -11,14 +11,16 @@ import ua.cyclopoid.back.form.Form;
 import ua.cyclopoid.back.form.FormNotFoundException;
 import ua.cyclopoid.back.property.api.PropertyService;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller()
 @RequestMapping(path = "/property")
 @CrossOrigin("*")
 public class PropertyController {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(PropertyController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PropertyController.class);
 
     @Autowired
     @Qualifier("propertyServiceImpl")
@@ -29,12 +31,14 @@ public class PropertyController {
     Map<String, List<Property>> getAllProperties() {
         HashMap<String, List<Property>> responce = new HashMap<>();
         responce.put("property", this.propertyService.findAll());
+
+        LOGGER.debug("return all properties");
+
         return responce;
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    @PostMapping(consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
     public @ResponseBody Map<String, String> addNewProperty(@RequestBody Map<String, String> request) {
         Property property = new Property();
         String propertyName = request.get("propertyName");
@@ -50,6 +54,9 @@ public class PropertyController {
         responceBody.put("result","success");
         responceBody.put("httpStatusCode", String.valueOf(HttpStatus.OK.value()));
         responceBody.put("propertyId", resultProperty.getId().toString());
+
+        LOGGER.debug("add new property {}", resultProperty);
+
         return responceBody;
     }
 
@@ -65,10 +72,5 @@ public class PropertyController {
         form.setId(formId);
 
         return form;
-    }
-
-    @Override
-    public String toString() {
-        return "PropertyController";
     }
 }

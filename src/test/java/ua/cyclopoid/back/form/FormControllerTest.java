@@ -1,7 +1,6 @@
 package ua.cyclopoid.back.form;
 
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +11,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
 import org.springframework.test.web.servlet.MockMvc;
 import ua.cyclopoid.TestConfig;
-import ua.cyclopoid.back.db.DBManager;
-import ua.cyclopoid.back.db.api.DataSource;
 
 import java.util.List;
 import java.util.Map;

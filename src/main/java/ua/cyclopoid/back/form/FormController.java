@@ -17,7 +17,7 @@ import java.util.Map;
 @CrossOrigin("*")
 public class FormController {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(FormController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FormController.class);
 
     @Autowired
     @Qualifier("formServiceImpl")
@@ -28,22 +28,28 @@ public class FormController {
     Map<String, List<Form>> getAllForms() {
         HashMap<String, List<Form>> responce = new HashMap<>();
         responce.put("forms", this.formService.findAll());
+
+        LOGGER.debug("return all forms");
+
         return responce;
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @PostMapping(value = "/add")
     public @ResponseBody
     Map<String, String> addNewForm(@RequestBody Map<String, String> request) {
         Form form = new Form();
         form.setName(request.get("formName"));
         this.formService.save(form);
 
-        return new HashMap<String, String>() {{
-            put("result", "success");
-        }};
+        Map<String, String> responceBody = new HashMap<>();
+        responceBody.put("result", "success");
+
+        LOGGER.debug("add new form {}", form);
+
+        return responceBody;
     }
 
-    @RequestMapping(value = "/by/id/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/by/id/{id}")
     public @ResponseBody
     Map<String, Form> getFormById(@PathVariable("id") String id) {
         Long formId;
@@ -54,6 +60,9 @@ public class FormController {
         }
         HashMap<String, Form> responce = new HashMap<>();
         responce.put("form", this.formService.getFormById(formId));
+
+        LOGGER.debug("form by id: {}", id);
+
         return responce;
     }
 }
