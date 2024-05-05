@@ -1,4 +1,4 @@
-# Cyclopoid API test
+# cyclopoid-api-test
 
 ##### Database
 ```
