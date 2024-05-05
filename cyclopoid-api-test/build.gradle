@@ -1,0 +1,75 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.1.0'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'application'
+}
+
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'org.junit.platform.gradle.plugin'
+
+group = 'ua.cyclopoid'
+version = '1.0.0'
+archivesBaseName = 'cyclopoid-api-test'
+
+sourceSets {
+    main.java.srcDir "src/main/java"
+    main.resources.srcDir "src/main/resources"
+    test.java.srcDir "src/test/java"
+    test.resources.srcDir "src/test/resources"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    annotationProcessor 'org.projectlombok:lombok:1.18.4'
+
+    compileOnly 'org.projectlombok:lombok:1.18.4'
+
+    testCompileOnly 'org.junit.jupiter:junit-jupiter-api:5.3.2'
+    testCompileOnly 'org.junit.jupiter:junit-jupiter-params:5.3.2'
+
+    testImplementation 'io.rest-assured:rest-assured:3.3.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.3.2'
+}
+
+task dbRestore(type: Exec) {
+    commandLine 'sh', 'db/restore.sh'
+}
+
+task envStart(type: Exec) {
+    commandLine 'docker-compose', '-f', 'docker/docker-compose-db.yml', 'up', '-d'
+}
+
+task envRemove(type: Exec) {
+    commandLine 'docker-compose', '-f', 'docker/docker-compose-db.yml', 'down'
+}
+
+task envStop(type: Exec) {
+    commandLine 'docker-compose', '-f', 'docker/docker-compose-db.yml', 'stop'
+    finalizedBy envRemove
+}
+
+task backRemove(type: Exec) {
+    commandLine 'docker-compose', '-f', 'docker/docker-compose-back.yml', 'down'
+}
+
+task backStop(type: Exec) {
+    commandLine 'docker-compose', '-f', 'docker/docker-compose-back.yml', 'stop'
+    finalizedBy backRemove
+}
+
+task backStart(type: Exec) {
+    commandLine 'docker-compose', '-f', 'docker/docker-compose-back.yml', 'up', '-d'
+    finalizedBy dbRestore
+}
